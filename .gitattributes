@@ -1,0 +1,4 @@
+* text=auto
+*.png binary
+assets/vendor/*.js -diff linguist-vendored
+dados/dados.js -diff linguist-generated

@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>G1 · Painel ALP</title>
+  <link rel="icon" href="assets/img/logo-g1.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:ital,wght@0,700;1,700;1,800&display=swap">
+  <link rel="stylesheet" href="assets/css/painel.css">
+</head>
+<body>
+<div class="g1" id="topo">
+  <header class="head">
+    <div class="plate"><img src="assets/img/logo-g1.png" alt="G1 Transportes"></div>
+    <div>
+      <div class="eyebrow" id="eyebrow">Operação ALP · GLP</div>
+      <h1>Resultado da frota ALP</h1>
+      <p class="takeaway" id="takeaway">Carregando…</p>
+    </div>
+    <button class="tema" id="tema" type="button" aria-label="Alternar tema claro e escuro">Tema escuro</button>
+  </header>
+  <div class="band" aria-hidden="true"><span class="stripes"></span><span class="txt">Transportando o futuro · faturamento × custos por cavalo</span></div>
+
+  <div class="filtro" id="filtro"></div>
+
+  <div class="kpis" id="kpis">
+    <div class="kpi">
+      <span class="k-lbl">Faturamento bruto</span>
+      <span class="k-val" data-field="faturamento" data-fmt="brl0">—</span>
+      <span class="k-sub">Ticket médio <b data-field="ticket_medio" data-fmt="brl0">—</b> por frete</span>
+    </div>
+    <div class="kpi">
+      <span class="k-lbl">Fretes realizados</span>
+      <span class="k-val" data-field="fretes" data-fmt="int">—</span>
+      <span class="k-sub"><b data-field="peso_t" data-fmt="t">—</b> de GLP carregadas</span>
+    </div>
+    <div class="kpi">
+      <span class="k-lbl">Livre G1 (planilha)</span>
+      <span class="k-val" data-field="livre_g1" data-fmt="brl0">—</span>
+      <span class="k-sub"><b data-field="livre_pct" data-fmt="pct">—</b> do faturamento, após ALP, combustível, parcela e manutenção</span>
+    </div>
+    <div class="kpi">
+      <span class="k-lbl">Custos no Sienge</span>
+      <span class="k-val" data-field="custos_sienge" data-fmt="brl0">—</span>
+      <span class="k-sub">Mão de obra <b data-field="mao_de_obra" data-fmt="brl0">—</b> · lançamentos de <span class="periodo-sienge">—</span></span>
+    </div>
+    <div class="kpi hero" id="kpi-resultado">
+      <span class="k-lbl">Resultado final</span>
+      <span class="k-val" data-field="resultado" data-fmt="brl0">—</span>
+      <span class="k-sub">Margem de <b data-field="margem" data-fmt="pct">—</b> sobre o faturamento</span>
+    </div>
+  </div>
+
+  <section id="cascata">
+    <h2>Para onde vai o faturamento</h2>
+    <p class="sec-note">Do faturamento bruto ao resultado final. As primeiras saídas vêm da planilha de faturamento; as últimas, dos centros de custo da placa no Sienge.</p>
+    <div class="card">
+      <div class="legend" id="leg-cascata"></div>
+      <div class="chart" id="ch-cascata"></div>
+      <div class="tip" id="tip-cascata" hidden></div>
+    </div>
+  </section>
+
+  <section id="placas">
+    <h2>Resultado por placa</h2>
+    <p class="sec-note" id="placas-note">Clique numa placa (barra ou linha) para filtrar o painel inteiro.</p>
+    <div class="card">
+      <h3>Composição do faturamento de cada cavalo</h3>
+      <p class="note">Cada barra é o faturamento da placa dividido em repasses e custos. O que sobra em azul é o resultado; o número no fim é a margem.</p>
+      <div class="legend" id="leg-comp"></div>
+      <div class="chart" id="ch-comp"></div>
+      <div class="tip" id="tip-comp" hidden></div>
+    </div>
+    <div class="card">
+      <h3>Tabela por placa</h3>
+      <p class="note">Valores em R$. Combustível % é o peso do diesel sobre o faturamento da placa. Clique no cabeçalho para ordenar.</p>
+      <div class="tbl-wrap">
+        <table id="tb-placas">
+          <thead><tr>
+            <th data-field="placa"><button type="button">Placa</button></th>
+            <th class="l" data-field="motorista"><button type="button">Motorista</button></th>
+            <th data-field="fretes"><button type="button">Fretes</button></th>
+            <th class="hide-sm" data-field="peso_t"><button type="button">Peso (t)</button></th>
+            <th data-field="faturamento"><button type="button">Faturamento</button></th>
+            <th class="hide-sm" data-field="repasse_alp"><button type="button">ALP 25%</button></th>
+            <th class="hide-sm" data-field="combustivel"><button type="button">Combustível</button></th>
+            <th class="hide-sm" data-field="comb_pct"><button type="button">Comb. %</button></th>
+            <th class="hide-sm" data-field="parcela"><button type="button">Parcela</button></th>
+            <th class="hide-sm" data-field="manutencao"><button type="button">Manut.</button></th>
+            <th data-field="livre_g1"><button type="button">Livre G1</button></th>
+            <th data-field="custos_sienge"><button type="button">Sienge</button></th>
+            <th data-field="resultado"><button type="button">Resultado</button></th>
+            <th data-field="margem"><button type="button">Margem</button></th>
+          </tr></thead>
+          <tbody></tbody>
+          <tfoot><tr>
+            <td>Frota</td><td class="l"></td>
+            <td data-total="fretes" data-fmt="int">—</td>
+            <td class="hide-sm" data-total="peso_t" data-fmt="dec1">—</td>
+            <td data-total="faturamento" data-fmt="brl">—</td>
+            <td class="hide-sm" data-total="repasse_alp" data-fmt="brl">—</td>
+            <td class="hide-sm" data-total="combustivel" data-fmt="brl">—</td>
+            <td class="hide-sm" data-total="comb_pct" data-fmt="pct">—</td>
+            <td class="hide-sm" data-total="parcela" data-fmt="brl">—</td>
+            <td class="hide-sm" data-total="manutencao" data-fmt="brl">—</td>
+            <td data-total="livre_g1" data-fmt="brl">—</td>
+            <td data-total="custos_sienge" data-fmt="brl">—</td>
+            <td data-total="resultado" data-fmt="brl">—</td>
+            <td data-total="margem" data-fmt="pct">—</td>
+          </tr></tfoot>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="operacao">
+    <h2>Operação no mês</h2>
+    <div class="grid2">
+      <div class="card">
+        <h3>Faturamento por dia</h3>
+        <p class="note">Soma do valor dos fretes pela data de carregamento.</p>
+        <div class="chart" id="ch-dia"></div>
+        <div class="tip" id="tip-dia" hidden></div>
+      </div>
+      <div class="card">
+        <h3>Destinos</h3>
+        <p class="note">Faturamento por destino; o número depois do nome é a quantidade de fretes.</p>
+        <div class="chart" id="ch-dest"></div>
+        <div class="tip" id="tip-dest" hidden></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="sienge">
+    <h2>Custos e receita no Sienge</h2>
+    <p class="sec-note">Relatório Fluxo de Caixa por Plano de Contas, análise "Comprometido", de <span class="periodo-sienge">—</span>. Cada placa é um centro de custo.</p>
+    <div class="grid2">
+      <div class="card">
+        <h3>Saídas por conta</h3>
+        <p class="note">Lançamentos separados por mês de competência no Sienge.</p>
+        <div class="legend" id="leg-conta"></div>
+        <div class="chart" id="ch-conta"></div>
+        <div class="tip" id="tip-conta" hidden></div>
+      </div>
+      <div class="card">
+        <h3>Livre G1 da planilha × receita lançada no Sienge</h3>
+        <p class="note" id="conc-note">Mesma placa, duas fontes.</p>
+        <div class="legend" id="leg-conc"></div>
+        <div class="chart" id="ch-conc"></div>
+        <div class="tip" id="tip-conc" hidden></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="viagens">
+    <h2>Viagens</h2>
+    <div class="card">
+      <div class="toolbar">
+        <input class="search" id="busca-viagens" type="search" placeholder="Buscar destino, motorista, CT-e, carreta…" aria-label="Buscar viagens">
+        <span class="count" id="viagens-count"></span>
+      </div>
+      <div class="tbl-wrap tall">
+        <table id="tb-viagens">
+          <thead><tr>
+            <th data-field="data"><button type="button">Data</button></th>
+            <th class="l" data-field="cavalo"><button type="button">Cavalo</button></th>
+            <th class="l" data-field="motorista"><button type="button">Motorista</button></th>
+            <th class="l" data-field="cte"><button type="button">CT-e</button></th>
+            <th class="l hide-sm" data-field="carreta"><button type="button">Carreta</button></th>
+            <th class="l hide-sm" data-field="origem"><button type="button">Origem</button></th>
+            <th class="l" data-field="destino"><button type="button">Destino</button></th>
+            <th data-field="quantidade_kg"><button type="button">Peso (kg)</button></th>
+            <th data-field="valor_frete"><button type="button">Frete</button></th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="atencao">
+    <h2>Pontos de atenção</h2>
+    <p class="sec-note">Inconsistências encontradas ao cruzar as fontes. Vale conferir antes de fechar o mês.</p>
+    <ul class="alerts" id="lista-alertas"></ul>
+  </section>
+
+  <footer class="fonte">
+    <p><b>Fontes.</b> Planilha <span id="nome-planilha">de faturamento</span> (abas Base e Faturamento por Placa) e relatório Sienge Fluxo de Caixa por Plano de Contas, um centro de custo por placa. Dados gerados em <span id="gerado-em">—</span>.</p>
+    <p><b>Como o resultado é calculado.</b> Resultado = Livre G1 da planilha − saídas do Sienge da mesma placa (salários, ajuda de custo, pneus, peças, manutenção, lavagem, materiais e PIS). Consideramos que esses lançamentos do Sienge não estão dentro da coluna "Manutenção e IPVA/seguro" da planilha. O período do Sienge (<span class="periodo-sienge">—</span>) pode incluir lançamentos do mês seguinte, como a folha de pagamento.</p>
+  </footer>
+</div>
+
+<script src="assets/vendor/d3.v7.9.0.min.js"></script>
+<script src="dados/dados.js"></script>
+<script src="assets/js/calculos.js"></script>
+<script src="assets/js/painel.js"></script>
+</body>
+</html>
